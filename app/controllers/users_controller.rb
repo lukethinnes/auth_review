@@ -1,16 +1,15 @@
 class UsersController < ApplicationController
 
+  before_action :authenticate, only: [:index, :show]
+
   def index
-    begin
-      authorization_header = request.headers["Authorization"]
-      token = authorization_header.split(' ')[1]
-      secret = Rails.application.secrets.secret_key_base
-      decoded_token = JWT.decode(token, secret)
-      @users = User.all
-      render json: @users
-    rescue
-      render json: 'Invalid.'
-    end
+    @users = User.all
+    render json: @users
+  end
+
+  def show
+    @user = User.find_by(params[:id])
+    render json: @user
   end
 
   def create
