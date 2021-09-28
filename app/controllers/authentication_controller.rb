@@ -6,13 +6,21 @@ class AuthenticationController < ApplicationController
     if @user
 
       if @user.authenticate(params[:password])
-        render json: 'Password match!'
-      else 
-        render json: 'Login failed.'
+
+        payload = { user_id: @user.id }
+
+        secret = Rails.application.secrets.secret_key_base
+
+        token = JWT.encode(payload, secret)
+
+        render json: { token: token }
+
+      else
+        render json: 'Login failed.', status: :unauthorized
       end
 
-    else 
-      render json: 'Nope.'
+    else
+      render json: 'Login failed.', status: :unauthorized
     end
 
   end
