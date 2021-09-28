@@ -1,0 +1,14 @@
+Style/Documentation:
+  Enabled: false
+  
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+IrresponsibleModule:
+  Enabled: false
+
+TooManyStatements:
+  Enabled: false
+
+DuplicateMethodCall:
+  Enabled: false

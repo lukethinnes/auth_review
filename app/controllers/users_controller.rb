@@ -1,19 +1,27 @@
 class UsersController < ApplicationController
 
-def index
-  @users = User.all
-  render json: @users
-end
+  def index
+    begin
+      authorization_header = request.headers["Authorization"]
+      token = authorization_header.split(' ')[1]
+      secret = Rails.application.secrets.secret_key_base
+      decoded_token = JWT.decode(token, secret)
+      @users = User.all
+      render json: @users
+    rescue
+      render json: 'Invalid.'
+    end
+  end
 
-def create
-  @user = User.create(user_params)
-  render json: @user
-end
+  def create
+    @user = User.create(user_params)
+    render json: @user
+  end
 
-private
+  private
 
-def user_params
-  params.require(:user).permit(:username, :password)
-end
+  def user_params
+    params.require(:user).permit(:username, :password)
+  end
 
 end
